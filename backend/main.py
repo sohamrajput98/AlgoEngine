@@ -10,6 +10,9 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from dependencies import get_current_user, get_db
 
+from dependencies import get_current_user  # ADD THIS LINE
+from fastapi.middleware.cors import CORSMiddleware  # ADD THIS LINE
+
 from db import SessionLocal
 from models.user import User
 from models.problem import Problem
@@ -28,6 +31,13 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 app = FastAPI()
 app.include_router(submissions.router)  # ✅ add router
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # -------------------------
 # DATABASE DEPENDENCY

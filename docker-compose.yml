@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: algoengine_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: aae
+      MYSQL_USER: algouser
+      MYSQL_PASSWORD: algopassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - algoengine
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: algoengine_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://algouser:algopassword@mysql:3306/aae
+      SECRET_KEY: your-super-secret-key-change-in-production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # For running code execution containers
+    networks:
+      - algoengine
+
+  # Python Runner (built but not running continuously)
+  python-runner:
+    build:
+      context: ./runners/python-runner
+      dockerfile: Dockerfile
+    container_name: algoengine_python_runner
+    profiles: ["runners"]  # Only built when needed
+    networks:
+      - algoengine
+
+  # C++ Runner (built but not running continuously)
+  cpp-runner:
+    build:
+      context: ./runners/cpp-runner
+      dockerfile: Dockerfile
+    container_name: algoengine_cpp_runner
+    profiles: ["runners"]  # Only built when needed
+    networks:
+      - algoengine
+
+  # Frontend (Simple HTTP Server)
+  frontend:
+    image: nginx:alpine
+    container_name: algoengine_frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - algoengine
+
+volumes:
+  mysql_data:
+
+networks:
+  algoengine:
+    driver: bridge

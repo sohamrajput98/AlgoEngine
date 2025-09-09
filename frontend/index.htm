@@ -1,0 +1,1012 @@
+</ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="auth-section">
+                        <button class="btn btn-outline-primary me-2" onclick="showLoginModal()">Login</button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">Register</button>
+                    </li>
+                    <li class="nav-item dropdown" id="user-section" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="username-display"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showPage('profile')">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page" class="main-content active">
+        <div class="hero-section">
+            <div class="container text-center">
+                <h1 class="display-4 mb-4">Master Algorithms with AlgoEngine</h1>
+                <p class="lead mb-4">Practice coding problems, visualize algorithms, and track your progress</p>
+                <button class="btn btn-light btn-lg me-3" onclick="showPage('problems')">Start Coding</button>
+                <button class="btn btn-outline-light btn-lg" onclick="showPage('visualizer')">Try Visualizer</button>
+            </div>
+        </div>
+
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">🎯 Adaptive Difficulty</h5>
+                            <p class="card-text">Problems adapt to your skill level for optimal learning</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">📊 Algorithm Visualization</h5>
+                            <p class="card-text">See how algorithms work with interactive visualizations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">🏆 Daily Challenges</h5>
+                            <p class="card-text">Stay sharp with curated daily coding challenges</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problems Page -->
+    <div id="problems-page" class="main-content">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Filters</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Concept</label>
+                                <select class="form-select" id="concept-filter">
+                                    <option value="">All Concepts</option>
+                                    <option value="arrays">Arrays</option>
+                                    <option value="sliding window">Sliding Window</option>
+                                    <option value="two pointers">Two Pointers</option>
+                                    <option value="binary search">Binary Search</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Difficulty</label>
+                                <select class="form-select" id="stars-filter">
+                                    <option value="">All Levels</option>
+                                    <option value="1">⭐ (1 star)</option>
+                                    <option value="2">⭐⭐ (2 stars)</option>
+                                    <option value="3">⭐⭐⭐ (3 stars)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="filterProblems()">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Problems</h2>
+                        <div class="loading" id="problems-loading">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+                    <div id="problems-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Solve Page -->
+    <div id="solve-page" class="main-content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between">
+                            <h5 id="problem-title">Problem Title</h5>
+                            <div>
+                                <span id="problem-stars" class="stars"></span>
+                                <span class="badge bg-secondary" id="problem-concept"></span>
+                            </div>
+                        </div>
+                        <div class="card-body" style="overflow-y: auto;">
+                            <div id="problem-description"></div>
+                            <hr>
+                            <h6>Sample Test Cases</h6>
+                            <div id="sample-testcases"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between">
+                            <h5>Code Editor</h5>
+                            <div>
+                                <select class="form-select form-select-sm d-inline-block w-auto me-2" id="language-select">
+                                    <option value="python">Python</option>
+                                    <option value="cpp">C++</option>
+                                </select>
+                                <button class="btn btn-success btn-sm" onclick="submitSolution()">
+                                    <span id="submit-loading" class="loading">
+                                        <span class="spinner-border spinner-border-sm me-1"></span>
+                                    </span>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="editor"></div>
+                        </div>
+                        <div class="card-footer">
+                            <div id="submission-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Challenge Page -->
+    <div id="daily-page" class="main-content">
+        <div class="container py-4">
+            <div class="text-center mb-4">
+                <h2>🏆 Daily Challenge</h2>
+                <p class="lead">Today's handpicked problem to keep your skills sharp</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="daily-challenge-content">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status"></div>
+                            <p class="mt-2">Loading today's challenge...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualizer Page -->
+    <div id="visualizer-page" class="main-content">
+        <div class="container py-4">
+            <h2 class="mb-4">Algorithm Visualizer</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action active" onclick="showVisualization('binary-search')">
+                            Binary Search
+                        </button>
+                        <button class="list-group-item list-group-item-action" onclick="showVisualization('two-pointers')">
+                            Two Pointers
+                        </button>
+                        <button class="list-group-item list-group-item-action" onclick="showVisualization('sliding-window')">
+                            Sliding Window
+                        </button>
+                        <button class="list-group-item list-group-item-action" onclick="showVisualization('stack-queue')">
+                            Stack & Queue
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div id="visualization-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 id="viz-title">Binary Search</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="viz-controls" class="mb-3">
+                                    <button class="btn btn-primary me-2" onclick="startVisualization()">Start</button>
+                                    <button class="btn btn-secondary me-2" onclick="resetVisualization()">Reset</button>
+                                    <input type="range" class="form-range d-inline-block w-25 me-2" id="speed-control" min="100" max="2000" value="1000">
+                                    <label>Speed</label>
+                                </div>
+                                <div id="viz-canvas" class="border p-3" style="min-height: 300px; background: #f8f9fa;">
+                                    <!-- Visualization will be rendered here -->
+                                    <div class="text-center text-muted">
+                                        <p>Click "Start" to begin the visualization</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile-page" class="main-content">
+        <div class="container py-4">
+            <h2>Profile</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body" id="profile-content">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status"></div>
+                                <p class="mt-2">Loading profile...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contest Page -->
+    <div id="contest-page" class="main-content">
+        <div class="container py-4 text-center">
+            <h2>🏁 Contests</h2>
+            <div class="alert alert-info">
+                <h4>Coming Soon!</h4>
+                <p>Real-time coding contests are under development. Stay tuned for competitive programming challenges!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learn Page -->
+    <div id="learn-page" class="main-content">
+        <div class="container py-4 text-center">
+            <h2>📚 Learn</h2>
+            <div class="alert alert-info">
+                <h4>Learning Section Coming Soon!</h4>
+                <p>Comprehensive tutorials and explanations for data structures and algorithms are in development.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="login-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Username or Email</label>
+                            <input type="text" class="form-control" id="login-username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <div id="login-error" class="alert alert-danger" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="register-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="register-username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                        <div id="register-error" class="alert alert-danger" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    
+    <script>
+        // Global variables
+        let editor;
+        let currentUser = null;
+        let currentProblem = null;
+        const API_BASE = window.location.protocol + '//' + window.location.hostname + ':8000';
+
+        // Initialize Monaco Editor
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '# Write your solution here\ndef solution():\n    pass\n\n# Example:\n# return result',
+                language: 'python',
+                theme: 'vs-dark',
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                automaticLayout: true
+            });
+        });
+
+        // Page navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.main-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName + '-page').classList.add('active');
+            
+            // Load page-specific data
+            switch(pageName) {
+                case 'problems':
+                    loadProblems();
+                    break;
+                case 'daily':
+                    loadDailyChallenge();
+                    break;
+                case 'profile':
+                    loadProfile();
+                    break;
+            }
+        }
+
+        // Authentication functions
+        function showLoginModal() {
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        }
+
+        function showRegisterModal() {
+            new bootstrap.Modal(document.getElementById('registerModal')).show();
+        }
+
+        // Check if user is logged in on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Verify token and get user info
+                fetch(`${API_BASE}/auth/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(user => {
+                    currentUser = user;
+                    updateAuthUI();
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
+                });
+            }
+        });
+
+        // Login form handler
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username_or_email: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.access_token);
+                    bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                    
+                    // Get user profile
+                    const profileResponse = await fetch(`${API_BASE}/auth/profile`, {
+                        headers: {
+                            'Authorization': `Bearer ${data.access_token}`
+                        }
+                    });
+                    currentUser = await profileResponse.json();
+                    updateAuthUI();
+                } else {
+                    document.getElementById('login-error').textContent = data.detail;
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('login-error').textContent = 'Login failed. Please try again.';
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+
+        // Register form handler
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                    alert('Registration successful! Please login.');
+                    showLoginModal();
+                } else {
+                    document.getElementById('register-error').textContent = data.detail;
+                    document.getElementById('register-error').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('register-error').textContent = 'Registration failed. Please try again.';
+                document.getElementById('register-error').style.display = 'block';
+            }
+        });
+
+        function updateAuthUI() {
+            if (currentUser) {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('user-section').style.display = 'block';
+                document.getElementById('username-display').textContent = currentUser.username;
+            } else {
+                document.getElementById('auth-section').style.display = 'block';
+                document.getElementById('user-section').style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            updateAuthUI();
+            showPage('home');
+        }
+
+        // Load problems
+        async function loadProblems() {
+            document.getElementById('problems-loading').style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/problems/`);
+                const problems = await response.json();
+                
+                displayProblems(problems);
+            } catch (error) {
+                document.getElementById('problems-list').innerHTML = 
+                    '<div class="alert alert-danger">Failed to load problems. Please try again.</div>';
+            } finally {
+                document.getElementById('problems-loading').style.display = 'none';
+            }
+        }
+
+        function displayProblems(problems) {
+            const container = document.getElementById('problems-list');
+            
+            if (problems.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">No problems found.</div>';
+                return;
+            }
+
+            container.innerHTML = problems.map(problem => {
+                const stars = '⭐'.repeat(problem.stars);
+                return `
+                    <div class="card problem-card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title">${problem.title}</h5>
+                                    <p class="card-text text-muted">${problem.description.substring(0, 100)}...</p>
+                                    <span class="badge bg-primary me-2">${problem.concept}</span>
+                                    <span class="stars">${stars}</span>
+                                </div>
+                                <button class="btn btn-outline-primary" onclick="solveProblem(${problem.id})">
+                                    Solve
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function solveProblem(problemId) {
+            if (!currentUser) {
+                alert('Please login to solve problems');
+                showLoginModal();
+                return;
+            }
+
+            try {
+                // Load problem details
+                const response = await fetch(`${API_BASE}/problems/${problemId}`);
+                currentProblem = await response.json();
+                
+                // Load test cases
+                const testcasesResponse = await fetch(`${API_BASE}/problems/${problemId}/testcases`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const testcases = await testcasesResponse.json();
+                
+                // Update solve page
+                document.getElementById('problem-title').textContent = currentProblem.title;
+                document.getElementById('problem-stars').textContent = '⭐'.repeat(currentProblem.stars);
+                document.getElementById('problem-concept').textContent = currentProblem.concept;
+                document.getElementById('problem-description').innerHTML = 
+                    `<pre style="white-space: pre-wrap;">${currentProblem.description}</pre>`;
+                
+                // Display sample test cases
+                const sampleTestcases = testcases.filter(tc => tc.is_sample);
+                document.getElementById('sample-testcases').innerHTML = sampleTestcases.map(tc => `
+                    <div class="mb-2">
+                        <strong>Input:</strong><br>
+                        <code>${tc.input_data}</code><br>
+                        <strong>Expected Output:</strong><br>
+                        <code>${tc.expected_output}</code>
+                    </div>
+                `).join('<hr>');
+                
+                showPage('solve');
+            } catch (error) {
+                alert('Failed to load problem. Please try again.');
+            }
+        }
+
+        async function submitSolution() {
+            if (!currentUser || !currentProblem) {
+                alert('Please login and select a problem first');
+                return;
+            }
+
+            const code = editor.getValue();
+            const language = document.getElementById('language-select').value;
+            
+            if (!code.trim()) {
+                alert('Please write some code first');
+                return;
+            }
+
+            document.getElementById('submit-loading').style.display = 'inline';
+            
+            try {
+                const response = await fetch(`${API_BASE}/submissions/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        problem_id: currentProblem.id,
+                        code: code,
+                        language: language
+                    })
+                });
+
+                const result = await response.json();
+                
+                const resultDiv = document.getElementById('submission-result');
+                if (result.status === 'accepted') {
+                    resultDiv.innerHTML = '<div class="alert alert-success">✅ Accepted! All test cases passed.</div>';
+                } else if (result.status === 'wrong_answer') {
+                    resultDiv.innerHTML = '<div class="alert alert-danger">❌ Wrong Answer. Some test cases failed.</div>';
+                } else if (result.status === 'runtime_error') {
+                    resultDiv.innerHTML = '<div class="alert alert-warning">⚠️ Runtime Error. Check your code for errors.</div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="alert alert-secondary">⏳ Processing...</div>';
+                }
+                
+            } catch (error) {
+                document.getElementById('submission-result').innerHTML = 
+                    '<div class="alert alert-danger">Failed to submit. Please try again.</div>';
+            } finally {
+                document.getElementById('submit-loading').style.display = 'none';
+            }
+        }
+
+        // Language selection handler
+        document.getElementById('language-select').addEventListener('change', function() {
+            const language = this.value;
+            if (language === 'python') {
+                editor.setValue('# Write your solution here\ndef solution():\n    pass\n');
+                monaco.editor.setModelLanguage(editor.getModel(), 'python');
+            } else if (language === 'cpp') {
+                editor.setValue('#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}');
+                monaco.editor.setModelLanguage(editor.getModel(), 'cpp');
+            }
+        });
+
+        async function loadDailyChallenge() {
+            try {
+                const response = await fetch(`${API_BASE}/problems/daily-challenge/today`);
+                const problem = await response.json();
+                
+                document.getElementById('daily-challenge-content').innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">${problem.title}</h3>
+                            <p class="text-muted">Difficulty: ${'⭐'.repeat(problem.stars)} | Concept: ${problem.concept}</p>
+                            <p class="card-text">${problem.description.substring(0, 200)}...</p>
+                            <button class="btn btn-primary" onclick="solveProblem(${problem.id})">Start Challenge</button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('daily-challenge-content').innerHTML = 
+                    '<div class="alert alert-danger">Failed to load daily challenge.</div>';
+            }
+        }
+
+        async function loadProfile() {
+            if (!currentUser) {
+                document.getElementById('profile-content').innerHTML = 
+                    '<div class="alert alert-warning">Please login to view your profile.</div>';
+                return;
+            }
+
+            document.getElementById('profile-content').innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 2rem;">
+                            ${currentUser.username.charAt(0).toUpperCase()}
+                        </div>
+                        <h4 class="mt-3">${currentUser.username}</h4>
+                        <p class="text-muted">${currentUser.email}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <h5>Profile Information</h5>
+                        <p><strong>Bio:</strong> ${currentUser.bio || 'No bio added yet'}</p>
+                        <p><strong>GitHub:</strong> ${currentUser.github_url ? `<a href="${currentUser.github_url}" target="_blank">View Profile</a>` : 'Not added'}</p>
+                        <p><strong>LinkedIn:</strong> ${currentUser.linkedin_url ? `<a href="${currentUser.linkedin_url}" target="_blank">View Profile</a>` : 'Not added'}</p>
+                        <p><strong>Portfolio:</strong> ${currentUser.portfolio_url ? `<a href="${currentUser.portfolio_url}" target="_blank">View Portfolio</a>` : 'Not added'}</p>
+                        <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editProfile() {
+            // Simple profile edit functionality
+            const bio = prompt('Enter your bio:', currentUser.bio || '');
+            const github = prompt('Enter your GitHub URL:', currentUser.github_url || '');
+            const linkedin = prompt('Enter your LinkedIn URL:', currentUser.linkedin_url || '');
+            const portfolio = prompt('Enter your Portfolio URL:', currentUser.portfolio_url || '');
+            
+            if (bio !== null) {
+                updateProfile({
+                    bio: bio,
+                    github_url: github,
+                    linkedin_url: linkedin,
+                    portfolio_url: portfolio
+                });
+            }
+        }
+
+        async function updateProfile(profileData) {
+            try {
+                const response = await fetch(`${API_BASE}/auth/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                if (response.ok) {
+                    const updatedUser = await response.json();
+                    currentUser = updatedUser;
+                    loadProfile(); // Reload profile display
+                    alert('Profile updated successfully!');
+                } else {
+                    alert('Failed to update profile');
+                }
+            } catch (error) {
+                alert('Failed to update profile');
+            }
+        }
+
+        function filterProblems() {
+            const concept = document.getElementById('concept-filter').value;
+            const stars = document.getElementById('stars-filter').value;
+            
+            let url = `${API_BASE}/problems/?`;
+            if (concept) url += `concept=${concept}&`;
+            if (stars) url += `stars=${stars}&`;
+            
+            document.getElementById('problems-loading').style.display = 'block';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(problems => displayProblems(problems))
+                .catch(error => {
+                    document.getElementById('problems-list').innerHTML = 
+                        '<div class="alert alert-danger">Failed to filter problems.</div>';
+                })
+                .finally(() => {
+                    document.getElementById('problems-loading').style.display = 'none';
+                });
+        }
+
+        // Visualization functions
+        function showVisualization(vizType) {
+            // Update active button
+            document.querySelectorAll('.list-group-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update visualization content
+            switch(vizType) {
+                case 'binary-search':
+                    document.getElementById('viz-title').textContent = 'Binary Search';
+                    setupBinarySearchViz();
+                    break;
+                case 'two-pointers':
+                    document.getElementById('viz-title').textContent = 'Two Pointers';
+                    setupTwoPointersViz();
+                    break;
+                case 'sliding-window':
+                    document.getElementById('viz-title').textContent = 'Sliding Window';
+                    setupSlidingWindowViz();
+                    break;
+                case 'stack-queue':
+                    document.getElementById('viz-title').textContent = 'Stack & Queue';
+                    setupStackQueueViz();
+                    break;
+            }
+        }
+
+        function setupBinarySearchViz() {
+            const canvas = document.getElementById('viz-canvas');
+            canvas.innerHTML = `
+                <div class="text-center mb-3">
+                    <p>Array: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] | Target: 11</p>
+                    <div id="array-display" class="d-flex justify-content-center">
+                        ${[1, 3, 5, 7, 9, 11, 13, 15, 17, 19].map((num, idx) => 
+                            `<div class="array-element m-1 p-2 border text-center" data-index="${idx}" style="width: 40px;">${num}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="mt-3">
+                        <span>Left: <span id="left-pointer">0</span></span>
+                        <span class="ms-3">Mid: <span id="mid-pointer">-</span></span>
+                        <span class="ms-3">Right: <span id="right-pointer">9</span></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupTwoPointersViz() {
+            const canvas = document.getElementById('viz-canvas');
+            canvas.innerHTML = `
+                <div class="text-center mb-3">
+                    <p>Find pair that sums to 12: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+                    <div id="array-display" class="d-flex justify-content-center">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, idx) => 
+                            `<div class="array-element m-1 p-2 border text-center" data-index="${idx}" style="width: 40px;">${num}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="mt-3">
+                        <span>Left: <span id="left-pointer">0</span></span>
+                        <span class="ms-3">Right: <span id="right-pointer">9</span></span>
+                        <span class="ms-3">Sum: <span id="current-sum">11</span></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupSlidingWindowViz() {
+            const canvas = document.getElementById('viz-canvas');
+            canvas.innerHTML = `
+                <div class="text-center mb-3">
+                    <p>Maximum sum of 3 consecutive elements: [2, 1, 5, 1, 3, 2, 6, 4]</p>
+                    <div id="array-display" class="d-flex justify-content-center">
+                        ${[2, 1, 5, 1, 3, 2, 6, 4].map((num, idx) => 
+                            `<div class="array-element m-1 p-2 border text-center" data-index="${idx}" style="width: 40px;">${num}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="mt-3">
+                        <span>Window: <span id="window-start">0</span> to <span id="window-end">2</span></span>
+                        <span class="ms-3">Sum: <span id="window-sum">8</span></span>
+                        <span class="ms-3">Max: <span id="max-sum">8</span></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupStackQueueViz() {
+            const canvas = document.getElementById('viz-canvas');
+            canvas.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Stack (LIFO)</h6>
+                        <div id="stack-display" class="border p-3" style="height: 200px;">
+                            <div class="text-center text-muted">Empty</div>
+                        </div>
+                        <button class="btn btn-sm btn-primary mt-2 me-2" onclick="pushToStack()">Push</button>
+                        <button class="btn btn-sm btn-secondary mt-2" onclick="popFromStack()">Pop</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Queue (FIFO)</h6>
+                        <div id="queue-display" class="border p-3" style="height: 200px;">
+                            <div class="text-center text-muted">Empty</div>
+                        </div>
+                        <button class="btn btn-sm btn-primary mt-2 me-2" onclick="enqueue()">Enqueue</button>
+                        <button class="btn btn-sm btn-secondary mt-2" onclick="dequeue()">Dequeue</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Simple visualization controls
+        let stack = [];
+        let queue = [];
+        let vizCounter = 1;
+
+        function pushToStack() {
+            stack.push(vizCounter++);
+            updateStackDisplay();
+        }
+
+        function popFromStack() {
+            if (stack.length > 0) {
+                stack.pop();
+                updateStackDisplay();
+            }
+        }
+
+        function updateStackDisplay() {
+            const display = document.getElementById('stack-display');
+            if (stack.length === 0) {
+                display.innerHTML = '<div class="text-center text-muted">Empty</div>';
+            } else {
+                display.innerHTML = stack.slice().reverse().map(item => 
+                    `<div class="bg-primary text-white text-center p-2 mb-1">${item}</div>`
+                ).join('');
+            }
+        }
+
+        function enqueue() {
+            queue.push(vizCounter++);
+            updateQueueDisplay();
+        }
+
+        function dequeue() {
+            if (queue.length > 0) {
+                queue.shift();
+                updateQueueDisplay();
+            }
+        }
+
+        function updateQueueDisplay() {
+            const display = document.getElementById('queue-display');
+            if (queue.length === 0) {
+                display.innerHTML = '<div class="text-center text-muted">Empty</div>';
+            } else {
+                display.innerHTML = '<div class="d-flex flex-wrap">' + 
+                    queue.map(item => 
+                        `<div class="bg-success text-white text-center p-2 m-1" style="width: 40px;">${item}</div>`
+                    ).join('') + '</div>';
+            }
+        }
+
+        function startVisualization() {
+            // Simple animation placeholder
+            alert('Visualization started! (Full animation implementation would go here)');
+        }
+
+        function resetVisualization() {
+            // Reset visualization state
+            stack = [];
+            queue = [];
+            vizCounter = 1;
+            if (document.getElementById('stack-display')) updateStackDisplay();
+            if (document.getElementById('queue-display')) updateQueueDisplay();
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any additional initialization
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoEngine - Algorithmic Assessment Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        .feature-card {
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        #editor {
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .problem-card {
+            border-left: 4px solid #007bff;
+        }
+        .stars {
+            color: #ffc107;
+        }
+        .loading {
+            display: none;
+        }
+        .main-content {
+            display: none;
+        }
+        .main-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">🚀 AlgoEngine</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('home')">Home</a>
+                    </li>

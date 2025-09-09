@@ -1,0 +1,8 @@
+[33m3e2aa90[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Task 3.4: Add Submission model
+[33m8419d09[m Task 3.3: Add TestCase model
+[33m453500b[m Task 3.2: Add Problem model
+[33m1a0ef05[m Task 3.1: Add User model
+[33m26dd228[m Task 2.2: Add SQLAlchemy engine and session setup
+[33mbdd92bf[m Task 2.1: Add FastAPI app instance and main setup
+[33m9dad813[m Task 2: Backend setup with FastAPI and initial health check
+[33mc2f4c35[m Task 1: Initial project setup with README
